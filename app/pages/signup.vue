@@ -14,24 +14,34 @@ const signup = async () => {
   }
 
   try {
+    const newUser = {
+      id: Date.now(),
+      username: username.value,
+      name: username.value,
+      email: email.value,
+      source: 'registeredUsers'
+    }
 
-    const response = await axios.post(
-      'https://jsonplaceholder.typicode.com/users',
-      {
-        username: username.value,
-        email: email.value,
-        password: password.value
-      }
+    const existingUsers = JSON.parse(
+      localStorage.getItem('registeredUsers') || '[]'
     )
 
-    console.log(response.data)
+    existingUsers.push(newUser)
+
+    localStorage.setItem(
+      'registeredUsers',
+      JSON.stringify(existingUsers)
+    )
+
+    console.log('Registered user:', newUser)
 
     alert('User Created')
 
-    navigateTo('/login')
+    await navigateTo('/login')
 
   } catch (error) {
-    console.log(error)
+    console.error('Signup error:', error)
+    alert('Something went wrong')
   }
 }
 </script>
